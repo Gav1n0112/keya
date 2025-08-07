@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const password = document.getElementById('password').value;
 
         // 发送登录请求到服务器
-        fetch('/api/login', {
+        fetch('/.netlify/functions/server/api/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
