@@ -4,6 +4,7 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const path = require('path');
+const serverless = require('serverless-http');
 const crypto = require('crypto');
 
 // 初始化Express应用
@@ -450,3 +451,4 @@ app.listen(PORT, () => {
     console.log(`用户验证页面: http://localhost:${PORT}`);
     console.log('默认管理员账号: admin / password (请登录后立即修改密码)');
 });
+module.exports.handler = serverless(app);
