@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function() {
             downloadUrls: downloadUrls
         };
 
-        fetch('/api/software', {
+        fetch('/.netlify/functions/server/api/software', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -503,7 +503,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        fetch('/api/keys', {
+        fetch('/.netlify/functions/server/api/keys', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
