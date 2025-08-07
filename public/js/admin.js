@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeModalBtns = document.querySelectorAll('.close-modal, .close-modal-btn');
     const changePasswordForm = document.getElementById('changePasswordForm');
     const toast = document.getElementById('toast');
+    const API_BASE = '/.netlify/functions/server';
     const toastMessage = document.getElementById('toastMessage');
 
     // 分页设置
@@ -222,7 +223,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 加载软件列表
     function loadSoftware() {
-        fetch('/api/software', {
+        fetch(API_BASE + '/api/software', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
