@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeModalBtns = document.querySelectorAll('.close-modal, .close-modal-btn');
     const changePasswordForm = document.getElementById('changePasswordForm');
     const toast = document.getElementById('toast');
-    const API_BASE = '/.netlify/functions/server';
+    const API_BASE = '/.netlify/functions/server'; // 基础路径（关键）
     const toastMessage = document.getElementById('toastMessage');
 
     // 分页设置
@@ -189,7 +189,8 @@ document.addEventListener('DOMContentLoaded', function() {
             downloadUrls: downloadUrls
         };
 
-        fetch('/.netlify/functions/server/api/software', {
+        // 修复：添加API_BASE前缀
+        fetch(`${API_BASE}/api/software`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -223,6 +224,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 加载软件列表
     function loadSoftware() {
+        // 已修复：使用API_BASE
         fetch(API_BASE + '/api/software', {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -419,7 +421,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 downloadUrls: downloadUrls
             };
 
-            fetch(`/api/software/${softwareId}`, {
+            // 修复：添加API_BASE前缀
+            fetch(`${API_BASE}/api/software/${softwareId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -467,7 +470,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // 删除软件
     function deleteSoftware(softwareId) {
         if (confirm('确定要删除这个软件吗？相关的卡密也会被删除。')) {
-            fetch(`/api/software/${softwareId}`, {
+            // 修复：添加API_BASE前缀
+            fetch(`${API_BASE}/api/software/${softwareId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -504,7 +508,8 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        fetch('/.netlify/functions/server/api/keys', {
+        // 已修复：使用API_BASE
+        fetch(`${API_BASE}/api/keys`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -583,7 +588,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 加载卡密列表
     function loadKeys() {
-        fetch('/api/keys', {
+        // 修复：添加API_BASE前缀
+        fetch(`${API_BASE}/api/keys`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -727,7 +733,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // 删除卡密
     function deleteKey(keyId) {
         if (confirm('确定要删除这个卡密吗？')) {
-            fetch(`/api/keys/${keyId}`, {
+            // 修复：添加API_BASE前缀
+            fetch(`${API_BASE}/api/keys/${keyId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -826,7 +833,8 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        fetch('/api/change-password', {
+        // 修复：添加API_BASE前缀
+        fetch(`${API_BASE}/api/change-password`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -888,3 +896,4 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+    
