@@ -142,6 +142,33 @@ async function writeData(filePath, data) {
   }
 }
 
+// 生成自定义格式卡密（ABCD-EFGH-IJK）
+function generateFormattedKey() {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; // 允许的字符（大写字母+数字）
+  let key = '';
+  
+  // 第一部分：4个字符
+  for (let i = 0; i < 4; i++) {
+    key += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  
+  key += '-'; // 添加分隔符
+  
+  // 第二部分：4个字符
+  for (let i = 0; i < 4; i++) {
+    key += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  
+  key += '-'; // 添加分隔符
+  
+  // 第三部分：3个字符
+  for (let i = 0; i < 3; i++) {
+    key += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  
+  return key;
+}
+
 // 登录接口
 router.post('/api/login', async (req, res) => {
   try {
@@ -353,7 +380,7 @@ router.get('/api/keys', authenticateToken, async (req, res) => {
   }
 });
 
-// 生成卡密
+// 生成卡密（使用自定义格式）
 router.post('/api/keys', authenticateToken, async (req, res) => {
   try {
     console.log('收到生成卡密请求');
@@ -370,13 +397,12 @@ router.post('/api/keys', authenticateToken, async (req, res) => {
       return res.status(404).json({ message: '软件不存在' });
     }
 
-    // 生成卡密
+    // 生成卡密（使用自定义格式函数）
     const keysList = await readData(KEYS_FILE);
     const newKeys = [];
     
     for (let i = 0; i < count; i++) {
-      // 生成随机卡密（32位）
-      const keyCode = crypto.randomBytes(16).toString('hex').toUpperCase();
+      const keyCode = generateFormattedKey(); // 调用自定义格式生成函数
       const newKey = {
         id: uuidv4(),
         code: keyCode,
@@ -480,4 +506,3 @@ if (require.main === module) {
 
 // 导出Netlify处理器（必须）
 module.exports.handler = serverless(app);
-    
