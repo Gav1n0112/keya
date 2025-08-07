@@ -13,7 +13,8 @@ const PORT = process.env.PORT || 3000;
 // 中间件
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'public')));
+// 注释掉这行：Netlify Functions不需要静态文件托管（前端文件已通过public目录部署）
+// app.use(express.static(path.join(__dirname, 'public')));
 
 // 密钥（实际应用中应使用环境变量）
 const JWT_SECRET = 'your-secret-key-here'; // 生产环境中应更换为强密钥
