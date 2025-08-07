@@ -109,16 +109,37 @@ async function writeData(filePath, data) {
   }
 }
 
-// 生成自定义格式卡密（ABCD-EFGH-IJK）
+// 生成自定义格式卡密（ABCD-EFGH-IJKL-NMOP）
 function generateFormattedKey() {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; // 大写字母+数字
   let key = '';
-  // 4位 + 4位 + 3位，带分隔符
-  for (let i = 0; i < 4; i++) key += chars[Math.floor(Math.random() * chars.length)];
-  key += '-';
-  for (let i = 0; i < 4; i++) key += chars[Math.floor(Math.random() * chars.length)];
-  key += '-';
-  for (let i = 0; i < 3; i++) key += chars[Math.floor(Math.random() * chars.length)];
+  
+  // 第一部分：4个字符
+  for (let i = 0; i < 4; i++) {
+    key += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  
+  key += '-'; // 分隔符
+  
+  // 第二部分：4个字符
+  for (let i = 0; i < 4; i++) {
+    key += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  
+  key += '-'; // 分隔符
+  
+  // 第三部分：4个字符
+  for (let i = 0; i < 4; i++) {
+    key += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  
+  key += '-'; // 分隔符
+  
+  // 第四部分：4个字符
+  for (let i = 0; i < 4; i++) {
+    key += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  
   return key;
 }
 
