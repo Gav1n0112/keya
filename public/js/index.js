@@ -7,6 +7,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const softwareExpiry = document.getElementById('softwareExpiry');
     const downloadLinksContainer = document.getElementById('downloadLinksContainer');
 
+    // 定义API基础路径（适配Netlify Functions）
+    const API_BASE = '/.netlify/functions/server';
+
     // 检查URL参数中是否有卡密
     const urlParams = new URLSearchParams(window.location.search);
     const keyFromUrl = urlParams.get('key');
@@ -26,18 +29,21 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // 发送卡密验证请求
-        fetch('/api/verify-key', {
+        // 发送卡密验证请求（已添加正确路径前缀）
+        fetch(`${API_BASE}/api/verify-key`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ key: keyCode })
+            body: JSON.stringify({ code: keyCode }) // 修复参数名，与后端保持一致
         })
         .then(response => {
             if (!response.ok) {
                 return response.json().then(data => {
                     throw new Error(data.message || '卡密验证失败');
+                }).catch(() => {
+                    // 处理非JSON格式的错误响应
+                    throw new Error('服务器响应格式错误');
                 });
             }
             return response.json();
@@ -58,6 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // 显示错误消息
     function showError(message) {
         errorMessage.textContent = message;
+        errorMessage.style.display = 'block';
         // 3秒后清除错误消息
         setTimeout(clearError, 3000);
     }
@@ -65,11 +72,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // 清除错误消息
     function clearError() {
         errorMessage.textContent = '';
+        errorMessage.style.display = 'none';
     }
 
     // 显示下载区域
     function showDownloadSection(data) {
-        softwareTitle.textContent = data.software.name;
+        softwareTitle.textContent = data.software?.name || '未知软件';
         
         // 显示有效期信息
         if (data.validUntil) {
@@ -82,27 +90,31 @@ document.addEventListener('DOMContentLoaded', function() {
         // 显示下载链接
         downloadLinksContainer.innerHTML = '';
         
-        data.software.downloadUrls.forEach((url, index) => {
-            const linkItem = document.createElement('div');
-            linkItem.className = 'download-link-item';
-            
-            let linkName = `下载文件 ${index + 1}`;
-            if (data.software.fileType === 'multiple') {
-                linkName = `分卷 ${index + 1}`;
-            }
+        if (data.software?.downloadUrls && data.software.downloadUrls.length > 0) {
+            data.software.downloadUrls.forEach((url, index) => {
+                const linkItem = document.createElement('div');
+                linkItem.className = 'download-link-item';
+                
+                let linkName = `下载文件 ${index + 1}`;
+                if (data.software.fileType === 'multiple') {
+                    linkName = `分卷 ${index + 1}`;
+                }
 
-            linkItem.innerHTML = `
-                <div class="link-info">
-                    <i class="fas fa-file link-icon"></i>
-                    <div class="link-name">${linkName}</div>
-                </div>
-                <a href="${url}" class="btn-download" target="_blank" rel="noopener noreferrer">
-                    <i class="fas fa-download"></i> 下载
-                </a>
-            `;
+                linkItem.innerHTML = `
+                    <div class="link-info">
+                        <i class="fas fa-file link-icon"></i>
+                        <div class="link-name">${linkName}</div>
+                    </div>
+                    <a href="${url}" class="btn-download" target="_blank" rel="noopener noreferrer">
+                        <i class="fas fa-download"></i> 下载
+                    </a>
+                `;
 
-            downloadLinksContainer.appendChild(linkItem);
-        });
+                downloadLinksContainer.appendChild(linkItem);
+            });
+        } else {
+            downloadLinksContainer.innerHTML = '<p>暂无可用下载链接</p>';
+        }
 
         // 显示下载区域并滚动到该区域
         downloadSection.style.display = 'block';
