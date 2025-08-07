@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>卡密管理 - 管理员界面</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <header class="admin-header">
+        <div class="header-left">
+            <h1><i class="fas fa-key"></i> 卡密管理系统</h1>
+        </div>
+        <div class="header-right">
+            <button id="changePasswordBtn" class="btn btn-secondary">
+                <i class="fas fa-lock"></i> 修改密码
+            </button>
+            <button id="logoutBtn" class="btn btn-danger">
+                <i class="fas fa-sign-out-alt"></i> 退出登录
+            </button>
+        </div>
+    </header>
+
+    <main class="admin-main">
+        <!-- 添加软件部分 -->
+        <section class="admin-section">
+            <div class="section-header" id="softwareSectionHeader">
+                <h2><i class="fas fa-plus-circle"></i> 添加软件</h2>
+                <i class="fas fa-chevron-down toggle-icon"></i>
+            </div>
+            <div class="section-content" id="softwareSectionContent">
+                <form id="softwareForm" class="software-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="softwareName">软件名称 *</label>
+                            <input type="text" id="softwareName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fileType">文件类型 *</label>
+                            <select id="fileType" required>
+                                <option value="single">单个文件</option>
+                                <option value="multiple">分卷压缩</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="downloadUrlsContainer">
+                        <div class="form-group download-url-group">
+                            <label for="downloadUrl1">下载地址 *</label>
+                            <div class="url-input-group">
+                                <input type="url" id="downloadUrl1" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" id="addUrlBtn" class="btn btn-secondary">
+                            <i class="fas fa-plus"></i> 添加更多地址
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> 保存软件
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- 生成卡密部分 -->
+        <section class="admin-section">
+            <div class="section-header" id="keySectionHeader">
+                <h2><i class="fas fa-key"></i> 生成卡密</h2>
+                <i class="fas fa-chevron-down toggle-icon"></i>
+            </div>
+            <div class="section-content" id="keySectionContent">
+                <form id="keyForm" class="key-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="selectSoftware">选择软件 *</label>
+                            <select id="selectSoftware" required>
+                                <option value="">-- 请选择软件 --</option>
+                                <!-- 动态填充软件列表 -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="keyCount">生成数量 *</label>
+                            <input type="number" id="keyCount" min="1" max="100" value="1" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="validityPeriod">有效期 *</label>
+                            <select id="validityPeriod" required>
+                                <option value="7">7天</option>
+                                <option value="30">30天</option>
+                                <option value="90">90天</option>
+                                <option value="180">180天</option>
+                                <option value="365">1年</option>
+                                <option value="0">永久有效</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-magic"></i> 生成卡密
+                        </button>
+                    </div>
+                </form>
+
+                <div id="generatedKeysContainer" class="generated-keys-container">
+                    <h3>生成的卡密</h3>
+                    <div id="generatedKeysList" class="keys-list">
+                        <!-- 生成的卡密将显示在这里 -->
+                    </div>
+                    <button id="copyKeysBtn" class="btn btn-secondary" style="display: none;">
+                        <i class="fas fa-copy"></i> 复制所有卡密
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 软件管理部分 -->
+        <section class="admin-section">
+            <div class="section-header" id="softwareManageSectionHeader">
+                <h2><i class="fas fa-list"></i> 软件管理</h2>
+                <i class="fas fa-chevron-down toggle-icon"></i>
+            </div>
+            <div class="section-content" id="softwareManageSectionContent">
+                <div class="software-list-header">
+                    <div class="search-filter">
+                        <input type="text" id="softwareSearch" placeholder="搜索软件...">
+                    </div>
+                </div>
+                <div id="softwareList" class="software-list">
+                    <!-- 软件列表将动态显示在这里 -->
+                </div>
+                <div class="pagination" id="softwarePagination">
+                    <!-- 分页控件将动态生成 -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 卡密管理部分 -->
+        <section class="admin-section">
+            <div class="section-header" id="keyManageSectionHeader">
+                <h2><i class="fas fa-key"></i> 卡密管理</h2>
+                <i class="fas fa-chevron-down toggle-icon"></i>
+            </div>
+            <div class="section-content" id="keyManageSectionContent">
+                <div class="key-list-header">
+                    <div class="search-filter">
+                        <input type="text" id="keySearch" placeholder="搜索卡密...">
+                    </div>
+                    <div class="filter-by-software">
+                        <select id="filterSoftware">
+                            <option value="">所有软件</option>
+                            <!-- 动态填充软件列表 -->
+                        </select>
+                    </div>
+                </div>
+                <div id="keyList" class="key-list">
+                    <!-- 卡密列表将动态显示在这里 -->
+                </div>
+                <div class="pagination" id="keyPagination">
+                    <!-- 分页控件将动态生成 -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 修改密码模态框 -->
+    <div id="changePasswordModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-lock"></i> 修改密码</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm">
+                    <div class="form-group">
+                        <label for="currentPassword">当前密码 *</label>
+                        <input type="password" id="currentPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">新密码 *</label>
+                        <input type="password" id="newPassword" minlength="6" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">确认新密码 *</label>
+                        <input type="password" id="confirmPassword" minlength="6" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">保存修改</button>
+                        <button type="button" class="btn btn-secondary close-modal-btn">取消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 提示消息 -->
+    <div id="toast" class="toast">
+        <span id="toastMessage"></span>
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>

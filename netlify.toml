@@ -1,0 +1,4 @@
+[build]
+  functions = "netlify/functions"  # 告诉Netlify后端函数的位置
+  publish = "public"               # 前端静态文件的位置
+  command = "npm install"          # 部署时的安装命令

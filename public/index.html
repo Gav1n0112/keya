@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>卡密验证 - 下载中心</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-download"></i> 资源下载中心</h1>
+            <p>请输入您的卡密以获取下载链接</p>
+        </header>
+
+        <main class="main-content">
+            <form id="keyVerificationForm" class="verification-form">
+                <div class="form-group">
+                    <label for="keyInput">卡密</label>
+                    <div class="input-group">
+                        <input type="text" id="keyInput" placeholder="请输入您的卡密" required>
+                        <button type="submit" class="btn-verify">
+                            <i class="fas fa-check"></i> 验证
+                        </button>
+                    </div>
+                </div>
+                <div id="errorMessage" class="error-message"></div>
+            </form>
+
+            <!-- 验证成功后显示的下载区域 -->
+            <div id="downloadSection" class="download-section">
+                <div class="software-info">
+                    <h2 id="softwareTitle"></h2>
+                    <p id="softwareExpiry"></p>
+                </div>
+                <div id="downloadLinksContainer" class="download-links">
+                    <!-- 下载链接将动态显示在这里 -->
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>如有问题，请联系客服</p>
+        </footer>
+    </div>
+
+    <script src="js/index.js"></script>
+</body>
+</html>
