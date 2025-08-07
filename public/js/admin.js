@@ -28,7 +28,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeModalBtns = document.querySelectorAll('.close-modal, .close-modal-btn');
     const changePasswordForm = document.getElementById('changePasswordForm');
     const toast = document.getElementById('toast');
-    const API_BASE = '/.netlify/functions/server';
     const toastMessage = document.getElementById('toastMessage');
 
     // 分页设置
@@ -223,7 +222,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 加载软件列表
     function loadSoftware() {
-        fetch(`${API_BASE}/api/software', {
+        fetch('/api/software', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -583,7 +582,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 加载卡密列表
     function loadKeys() {
-        fetch(`${API_BASE}/api/keys', {
+        fetch('/api/keys', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -826,7 +825,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        fetch(`${API_BASE}/api/change-password', {
+        fetch('/api/change-password', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
