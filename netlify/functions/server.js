@@ -21,7 +21,7 @@ const ADMIN_USERNAME = 'admin'; // 默认管理员用户名
 const ADMIN_PASSWORD = 'password'; // 默认管理员密码，首次登录后应修改
 
 // 数据存储文件路径
-const DATA_DIR = path.join(__dirname, 'data');
+const DATA_DIR = path.join(process.cwd(), 'tmp', 'data');
 const SOFTWARE_FILE = path.join(DATA_DIR, 'software.json');
 const KEYS_FILE = path.join(DATA_DIR, 'keys.json');
 const USER_FILE = path.join(DATA_DIR, 'user.json');
